@@ -1,7 +1,7 @@
 const fetchData = require('./api');
 
 // This connection string can be put in an env file for security along with other sensitive data like API keys
-// it can be imported from config.js file if.
+// it can be imported from config.js file.
 // this will be explored in v2 of the project
 const API_URL = 'https://opentdb.com/api.php?amount=10';
 
