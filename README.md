@@ -1,6 +1,6 @@
 # Web Development Code Snippets
 
-This README outlines a collection of essential web development components, ordered from 1 to 10. Each snippet represents a common feature or functionality in modern web development.
+This README outlines a collection of essential web development components. Each snippet represents a common feature or functionality in modern web development.
 
 ---
 
