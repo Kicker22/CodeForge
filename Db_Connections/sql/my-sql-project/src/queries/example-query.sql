@@ -1,1 +1,1 @@
-SELECT * FROM example_table;
+SELECT * FROM items;
