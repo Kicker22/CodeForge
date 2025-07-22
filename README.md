@@ -20,4 +20,7 @@ The project includes:
 ## Project Structure
 
 Each DSA topic has its own directory. Inside, you'll find:
+1. JS directory for visuals
+2. Python directory for deeper understanding of logic.
+3. Readme.md for each dir with useful info I collect while developing
 
