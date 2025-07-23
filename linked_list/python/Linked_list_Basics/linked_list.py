@@ -1,4 +1,9 @@
-#Define the Node
+# ============================================
+# This is an example of a basic signly linked list 
+# I have included some basic methods and kept everything in one file to keep it simple
+# ============================================
+
+#Define a Node
 class Node:
     def __init__(self, data):
         self.data = data
@@ -123,7 +128,6 @@ def find_item(self, item):
     print(f"Item: {item} not found in list.")
     return
 
-    
 # Visual helper function for printing in terminal
 # ===============================================
 my_list = LinkedList()
@@ -131,6 +135,7 @@ print("===========================")
 print("OG List")
 print("===========================")
 
+# This function populates the list with a default of 5 nodes
 def call_in_range(num=5):
     count = 1
     for i in range(num):
@@ -138,14 +143,15 @@ def call_in_range(num=5):
         my_list.print_list()
         count +=1
 
-call_in_range(6)
+# change size of list here
+call_in_range()
 
+# Try different methods here
 print("===========================")
 my_list.reverse_list()
 print("Reversed list")
 my_list.print_list()
 print("===========================")
-my_list.find_item(5)
 # ===============================================
 
 

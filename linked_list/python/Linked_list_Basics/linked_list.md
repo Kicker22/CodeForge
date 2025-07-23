@@ -6,7 +6,7 @@
 - [Growth Process](#basic-node-growth)
 - [Why Use Linked Lists?](#so-why-use-a-linked-list)
 
- ## What's the diff between linked lists and arrays?
+ ## What's the difference between linked lists and arrays?
 
 
  | Feature            | Array                           | Singly Linked List                      |
@@ -54,7 +54,7 @@ In contrast, arrays offer constant-time access (O(1)) via built-in indexing:
 arr[2] directly jumps to the memory location for index 2, without needing to traverse any values.
 
 ## Basic linked list starting structure
-We want to define our node and our list
+We want to define a node and a list
 
 ```
 class Node:
@@ -68,8 +68,24 @@ class LinkedList:
         self.tail = None      # (Optional) End of the list for O(1) append
         self.length = 0       # (Optional) Number of elements in the list
 ```
-### Basic node growth 
+### Basic node growth (Insert at head example)
+```
+def insert_at_head(self, data):
+
+    new_node = Node(data)
+        
+    if self.head is None:
+        self.head = new_node
+        self.tail = new_node
+     else:
+        new_node.next = self.head
+        self.head = new_node
+
+    self.length +=1 
+
+```
 Each time you insert a new node, the list “grows” by:
+
 
 1. Allocating a new node object in memory (usually on the heap)
 
@@ -82,7 +98,12 @@ Each time you insert a new node, the list “grows” by:
 |  Data  | Next  | --> points to the next node  --> |  Data  | Next  |   
 +--------+-------+                                  +--------+-------+
 ```
-As you add more nodes it becomes: 
+As you add more nodes it grows as shown in the Linked List example below.  
+
+### Singly lingked list structure:
+Notice that each node points to the next node via its .next reference.
+Each node lives independently in memory, not in a contiguous block like an array.
+They are connected solely by pointers.
 
 ```
 [1] -> None
@@ -94,15 +115,53 @@ As you add more nodes it becomes:
 [6] -> [5] -> [4] -> [3] -> [2] -> [1] -> [16] -> None
 ```
 
-Each node is independent in memory, and only linked by .next pointers. There's no contiguous block like with an array.
+Again, Each node is independent in memory, and only linked by .next pointers.
+```
+
+[6] -> [5] -> [4] -> [3] -> [2] -> [1] -> [16] -> None
+
+┌─────────────┐        ┌─────────────┐        ┌─────────────┐
+│ Data:   6   │   →    │ Data:   5   │   →    │ Data:   4   │   → None
+│ Next:  208  │        │ Next:  412  │        │ Next: None  │
+└─────────────┘        └─────────────┘        └─────────────┘
+   Addr: 100              Addr: 208              Addr: 412
+
+```
+
+### Basic Array/list Structure:
+In contrast, arrays or Python lists store items in a contiguous block of memory, where each element is indexed automatically:
+
+Arrays are like a row of boxes in a shelf, tightly packed and indexed:
+```
+[My, cat, is, orange, !]
+
+ Memory Addresses → 
+┌────────┬────────┬────────┬────────┬────────┐ 
+│  100   │  104   │  108   │  112   │  116   │  ← addresses (simplified) ├────────┼────────┼────────┼────────┼────────┤ 
+│  [My]  │ [cat]  │  [is]  │[orange]│  [!]   │  ← values 
+└────────┴────────┴────────┴────────┴────────┘ 
+    0        1         2        3       4       ← index 
+``` 
 
 ### You can reference the Python or JS files in the linked_list directory for examples on common methods usually found in LL's
 
+# Challenges (Singly linked lists)
+| Problem                    | Concept Practiced            |
+| -------------------------- | ---------------------------- |
+| **Reverse a list**      | Pointer rewiring             |
+| **Find middle of list**    | Fast/slow pointer pattern    |
+| **Detect cycle (Floyd’s)** | Algorithmic pointer logic    |
+| **Nth from end**           | Two-pointer sliding window   |
+| **Merge two sorted lists** | Recursion or iterative merge |
+| **Remove duplicates**      | Memory + traversal           |
+
+
+# Advanced concepts 
 
 ## So why use a linked list ?? 
 
 They are best when: 
-* Insert/delete frequently at the head or middle
+* You are going to Insert/delete frequently at the head or middle
 * Don’t need fast random access
 * Want dynamic memory usage without resizing arrays
 
