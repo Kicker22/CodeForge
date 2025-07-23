@@ -156,7 +156,6 @@ Arrays are like a row of boxes in a shelf, tightly packed and indexed:
 | **Remove duplicates**      | Memory + traversal           |
 
 
-# Advanced concepts 
 
 ## So why use a linked list ?? 
 
@@ -165,6 +164,8 @@ They are best when:
 * Don’t need fast random access
 * Want dynamic memory usage without resizing arrays
 
+# Advanced concepts 
+TBD...
 
 
 
