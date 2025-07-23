@@ -89,19 +89,64 @@ class LinkedList:
             output += "None"
             print(output)
             return
+    
+    def reverse_list(self):
+        prev = None
+        curr = self.head
 
+        while curr is not None:
+            # new var next_node  = the next item in list
+            next_node = curr.next
+            # current node = the previous node
+            curr.next = prev
+            # previous node = the current node 
+            prev = curr
+            # Move current forward
+            curr = next_node
+
+        self.tail = self.head
+        self.head = prev
+
+def find_item(self, item):
+    curr = self.head
+    
+    # Start at head (index 0)
+    index = 0  
+
+    while curr is not None:
+        if curr.data == item:
+            print(f"Item: {item} found at index: {index}")
+            return index
+        curr = curr.next
+        index += 1
+
+    print(f"Item: {item} not found in list.")
+    return
+
+    
 # Visual helper function for printing in terminal
 # ===============================================
 my_list = LinkedList()
+print("===========================")
+print("OG List")
+print("===========================")
+
 def call_in_range(num=5):
     count = 1
     for i in range(num):
         my_list.insert_at_head(count)
         my_list.print_list()
         count +=1
+
 call_in_range(6)
 
-my_list.insert_at_tail(16)
-my_list.delete_node(1)
+print("===========================")
+my_list.reverse_list()
+print("Reversed list")
 my_list.print_list()
+print("===========================")
+my_list.find_item(5)
 # ===============================================
+
+
+

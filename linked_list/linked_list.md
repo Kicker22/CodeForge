@@ -1,6 +1,12 @@
  # Linked list basics
- 
- ### What's the diff between linked lists and arrays?
+ ### Table of Contents
+- [Linked List vs Array](#whats-the-diff-between-linked-lists-and-arrays)
+- [Conceptual Indexing](#important-distinction)
+- [Basic Structure](#basic-linked-list-starting-structure)
+- [Growth Process](#basic-node-growth)
+- [Why Use Linked Lists?](#so-why-use-a-linked-list)
+
+ ## What's the diff between linked lists and arrays?
 
 
  | Feature            | Array                           | Singly Linked List                      |
@@ -13,12 +19,44 @@
 | Resize             | Needs copying or reserved space | Grows one node at a time                |
 
 
+### Important Distinction
+
+ Linked lists don’t have native indexes built in. You create the idea of an index by manually counting as you traverse the list:
+
+ Even though a linked list doesn’t store elements in a contiguous block of memory like an array does, you can still refer to each node by its “position” starting from 0
+
+The example below shows a method for finding a specific item (i.e. node data) in a singly linked list.
+
+Since linked lists don’t have built-in indexing like arrays, I need to manually track an index as I traverse the list.
+
+This “index” isn’t a real memory address — it's just a conceptual position starting at 0, which helps me reason through the list more easily.
+I find it much simpler to think in terms of 0-based indices (e.g. 0 to 5) than to worry about actual memory locations, which are abstracted away in Python anyway.
+
+```
+def find_item(self, item):
+    curr = self.head
+    
+    # Start at head (index 0)
+    index = 0  
+
+    while curr is not None:
+        if curr.data == item:
+            print(f"Item: {item} found at index: {index}")
+            return index
+        curr = curr.next
+        index += 1
+
+    print(f"Item: {item} not found in list.")
+    return
+
+```
+In contrast, arrays offer constant-time access (O(1)) via built-in indexing:
+arr[2] directly jumps to the memory location for index 2, without needing to traverse any values.
+
 ## Basic linked list starting structure
 We want to define our node and our list
 
 ```
-<!-- Python -->
-
 class Node:
     def __init__(self, val):
         self.val = val
@@ -31,7 +69,21 @@ class LinkedList:
         self.length = 0       # (Optional) Number of elements in the list
 ```
 ### Basic node growth 
- This was created by inserting at the head of the list and then one insert (16) at tail. Notice that [1] was added first and then is assigned to tail as we add to the list. Until, we add a value directly to the tail of the list.
+Each time you insert a new node, the list “grows” by:
+
+1. Allocating a new node object in memory (usually on the heap)
+
+2. Linking it to the existing chain by setting the .next pointer on another node
+
+3. Updating head, tail, or intermediate .next pointers as needed
+
+```
++--------+-------+                                  +--------+-------+
+|  Data  | Next  | --> points to the next node  --> |  Data  | Next  |   
++--------+-------+                                  +--------+-------+
+```
+As you add more nodes it becomes: 
+
 ```
 [1] -> None
 [2] -> [1] -> None
@@ -41,6 +93,19 @@ class LinkedList:
 [6] -> [5] -> [4] -> [3] -> [2] -> [1] -> None
 [6] -> [5] -> [4] -> [3] -> [2] -> [1] -> [16] -> None
 ```
+
+Each node is independent in memory, and only linked by .next pointers. There's no contiguous block like with an array.
+
+### You can reference the Python or JS files in the linked_list directory for examples on common methods usually found in LL's
+
+
+## So why use a linked list ?? 
+
+They are best when: 
+* Insert/delete frequently at the head or middle
+* Don’t need fast random access
+* Want dynamic memory usage without resizing arrays
+
 
 
 
