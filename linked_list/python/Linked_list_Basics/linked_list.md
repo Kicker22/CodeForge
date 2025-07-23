@@ -137,7 +137,8 @@ Arrays are like a row of boxes in a shelf, tightly packed and indexed:
 
  Memory Addresses → 
 ┌────────┬────────┬────────┬────────┬────────┐ 
-│  100   │  104   │  108   │  112   │  116   │  ← addresses (simplified) ├────────┼────────┼────────┼────────┼────────┤ 
+│  100   │  104   │  108   │  112   │  116   │  ← addresses (simplified) 
+├────────┼────────┼────────┼────────┼────────┤ 
 │  [My]  │ [cat]  │  [is]  │[orange]│  [!]   │  ← values 
 └────────┴────────┴────────┴────────┴────────┘ 
     0        1         2        3       4       ← index 
