@@ -1,9 +1,8 @@
 #Define the Node
 class Node:
-    def __init__(self, val):
-        self.val = val
+    def __init__(self, data):
+        self.data = data
         self.next = None
-
 
 #Define the linked list
 class LinkedList:
@@ -12,8 +11,8 @@ class LinkedList:
         self.tail = None
         self.length = 0
 
-    def insert_at_head(self, val):
-        new_node = Node(val)
+    def insert_at_head(self, data):
+        new_node = Node(data)
         
         # if list is empty add node to head and tail
         if self.head is None:
@@ -25,8 +24,8 @@ class LinkedList:
 
         self.length +=1 
 
-    def insert_at_tail(self, val):
-        new_node = Node(val)
+    def insert_at_tail(self, data):
+        new_node = Node(data)
 
         if not self.head:
             self.head = new_node
@@ -39,6 +38,30 @@ class LinkedList:
             self.tail = new_node
 
         self.length += 1
+
+    def delete_node(self, key):
+        # Set temp var to store data
+        temp = self.head
+
+        # If key is head
+        if temp is not None:
+            if temp.data == key:
+                self.head = temp.next
+                temp = None
+                return
+        
+        # Otherwise
+        while temp is not None:
+            if temp.data == key:
+                break
+            prev = temp 
+            temp = temp.next
+
+        if temp == None:
+            return
+            
+        prev.next = temp.next
+        temp = None
 
     def print_list(self):
         current_node = self.head
@@ -56,7 +79,7 @@ class LinkedList:
                 # red (tail)
                 color = "\033[91m"  
 
-            output += f"{color}[{current_node.val}]\033[0m -> "
+            output += f"{color}[{current_node.data}]\033[0m -> "
             current_node = current_node.next
             index += 1
         if counter >= 20:
@@ -79,5 +102,6 @@ def call_in_range(num=5):
 call_in_range(6)
 
 my_list.insert_at_tail(16)
+my_list.delete_node(1)
 my_list.print_list()
 # ===============================================
