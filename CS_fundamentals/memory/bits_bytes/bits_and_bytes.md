@@ -173,3 +173,97 @@ It can be:
 
 > The **wire is the highway**,  
 > The **bit is the car** — or the absence of one.
+
+# Lets Bring it full circle
+
+### Layer 1
+At the lowest level, your CPU is just billions of transistors arranged into logic gates that manipulate bits
+Examples:
+
+* AND: Only outputs 1 if both inputs are 1
+
+* OR: Outputs 1 if either input is 1
+
+* NOT: Flips 0 to 1 or 1 to 0
+
+These gates are physically hardwired into your CPU and memory.
+
+### Layer 2
+Every CPU has a built-in "vocabulary" of actions it can take — called the Instruction Set Architecture (ISA).
+These include instructions like: 
+
+* **ADD** (Add two numbers) 
+
+* **MOV** (move data) 
+
+* **JMP** (Jump to another instruction) 
+
+Each instruction is assigned a uniqe binary code, called an **opcode** (operation code) 
+
+For example (In a made up cpu):
+
+* 0001 = ADD
+* 0010 = SUB
+* 0011 = MOV
+
+So when you send it: 
+* **0001 1000 1001**,
+
+What you just said was: 
+* **ADD register 8 to register 9**
+
+### Layer 3
+Machine code is just long sequences of bits, divided into instructions the CPU knows how to execute.
+
+For example:
+
+10110000 01100001
+
+Might Mean 
+
+MOV AL, 61h   ; Move value 0x61 into register AL
+
+How does the CPU "understand" this?
+
+* Because it’s built to decode specific patterns of 1s and 0s into actions — based on the ISA.
+
+# Layer 4
+Machine code is hard to read, so humans invented assembly — a 1-to-1 readable form of machine code:
+
+MOV AL, 61h
+ADD AL, 02h
+INT 21h
+
+Every line translates directly into machine code — nothing magical — just easier to write.
+
+# Layer 5 
+This is where you come in. You write:
+
+print("Hello, world!")
+
+Then: 
+1. Compiler/Interpreter translates that to machine code
+
+2. CPU reads the machine code
+
+3. Hardware executes the binary instructions
+
+4. Result gets displayed via memory + I/O instructions
+
+### So How Does the Computer Know What I Want?
+It doesn’t — you train it through layers of abstraction.
+
+* You write high-level code 
+* Compiler converts to machine code
+* Machine code is just binary patterns
+* CPU decodes the patterns using its instruction set
+* Logic gates do the work
+
+Each 1 and 0 is only meaningful because of context — the context defined by:
+
+* The instruction set
+* The position in the sequence
+* The CPU’s microarchitecture
+
+
+
