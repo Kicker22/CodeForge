@@ -14,6 +14,7 @@ def main():
         print(f"Decimal: {args.dec}")
         print(f"Binary: {binary}")
 
-
+# To run this script the command line should be:
+# python converter.py --dec <decimal_number>
 if __name__ == '__main__':
     main()
