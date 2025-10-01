@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Data Structures Overview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="./assets/style.css" rel="stylesheet" />
+  <script type="module" src="./scripts/dataStructGeneral.js"></script>
+</head>
+<body>
+  <main id="page-root">
+    <header>
+      <h1>General Data Structures</h1>
+      <p class="tagline">The building blocks of efficient algorithms and system design.</p>
+    </header>
+
+    <section>
+      <h2>Why Data Structures Matter</h2>
+      <ul>
+        <li><strong>Performance:</strong> The same task can be milliseconds or minutes depending on your structure.</li>
+        <li><strong>Correctness:</strong> DS choices encode invariants that prevent classes of bugs.</li>
+        <li><strong>Clarity:</strong> The right DS makes code simpler to reason about and maintain.</li>
+      </ul>
+    </section>
+
+    <section id="complexity-section">
+      <h2>Operations and Complexity</h2>
+      <p>Typical costs for <em>arrays</em>. Values marked with <strong>*</strong> are amortized.</p>
+      <!-- JS inserts the table -->
+    </section>
+
+    <section id="array-demo-section">
+      <h2>Interactive: Dynamic Array Playground</h2>
+      <p>Simulates a dynamic array that doubles capacity on overflow. Try push/pop/insert/delete and watch <em>length</em> vs <em>capacity</em>.</p>
+      <div id="array-demo"></div>
+    </section>
+
+    <section id="quiz-section">
+      <h2>Quick Self-Check</h2>
+      <ol id="quiz-list"></ol>
+    </section>
+  </main>
+</body>
+</html>
