@@ -11,33 +11,99 @@
   <main id="page-root">
     <header>
       <h1>General Data Structures</h1>
-      <p class="tagline">The building blocks of efficient algorithms and system design.</p>
+      <p class="tagline">A quick tour of the most common structures—with visuals.</p>
     </header>
 
     <section>
       <h2>Why Data Structures Matter</h2>
-      <ul>
-        <li><strong>Performance:</strong> The same task can be milliseconds or minutes depending on your structure.</li>
-        <li><strong>Correctness:</strong> DS choices encode invariants that prevent classes of bugs.</li>
-        <li><strong>Clarity:</strong> The right DS makes code simpler to reason about and maintain.</li>
-      </ul>
+      <p>
+        A <em>data structure</em> is just a way to organize data so common tasks are fast and simple.
+        The “right” choice depends on what you do most: look things up, insert, delete, or keep order.
+      </p>
     </section>
 
-    <section id="complexity-section">
-      <h2>Operations and Complexity</h2>
-      <p>Typical costs for <em>arrays</em>. Values marked with <strong>*</strong> are amortized.</p>
-      <!-- JS inserts the table -->
-    </section>
+    <!-- Gallery -->
+    <section>
+      <h2>Data Structure Gallery</h2>
+      <div class="ds-grid">
+        <!-- Arrays -->
+        <article class="ds-card">
+          <header class="ds-card-head">
+            <h3>Arrays</h3>
+            <small>Fast index access • good cache locality</small>
+          </header>
+          <p>Store items back-to-back. Great for reading by position. Inserts in the middle are slower (need to shift).</p>
+          <div id="demo-arrays"></div>
+          <div class="ds-actions">
+            <a href="./dataStructArray.html">Learn more →</a>
+          </div>
+        </article>
 
-    <section id="array-demo-section">
-      <h2>Interactive: Dynamic Array Playground</h2>
-      <p>Simulates a dynamic array that doubles capacity on overflow. Try push/pop/insert/delete and watch <em>length</em> vs <em>capacity</em>.</p>
-      <div id="array-demo"></div>
-    </section>
+        <!-- Linked Lists -->
+        <article class="ds-card">
+          <header class="ds-card-head">
+            <h3>Linked Lists</h3>
+            <small>Cheap inserts/removals with a cursor</small>
+          </header>
+          <p>Each node points to the next. No index access; but adding/removing near a node is quick.</p>
+          <div id="demo-linked-list"></div>
+          <div class="ds-actions">
+            <a href="./dataStructLinkedList.html">Learn more →</a>
+          </div>
+        </article>
 
-    <section id="quiz-section">
-      <h2>Quick Self-Check</h2>
-      <ol id="quiz-list"></ol>
+        <!-- Stacks -->
+        <article class="ds-card">
+          <header class="ds-card-head">
+            <h3>Stacks</h3>
+            <small>LIFO: last-in, first-out</small>
+          </header>
+          <p>Think of a stack of plates. Push to add on top; pop removes the top.</p>
+          <div id="demo-stack"></div>
+          <div class="ds-actions">
+            <a href="./dataStructStack.html">Learn more →</a>
+          </div>
+        </article>
+
+        <!-- Queues -->
+        <article class="ds-card">
+          <header class="ds-card-head">
+            <h3>Queues</h3>
+            <small>FIFO: first-in, first-out</small>
+          </header>
+          <p>Like a line at a store. Enqueue at the back; dequeue from the front.</p>
+          <div id="demo-queue"></div>
+          <div class="ds-actions">
+            <a href="./dataStructQueue.html">Learn more →</a>
+          </div>
+        </article>
+
+        <!-- Trees (preview) -->
+        <article class="ds-card">
+          <header class="ds-card-head">
+            <h3>Trees</h3>
+            <small>Hierarchies; fast search with ordering</small>
+          </header>
+          <p>Nodes with children. Binary Search Trees keep values ordered for faster lookups.</p>
+          <div id="demo-tree"></div>
+          <div class="ds-actions">
+            <a href="./dataStructTree.html">Learn more →</a>
+          </div>
+        </article>
+
+        <!-- Graphs (preview) -->
+        <article class="ds-card">
+          <header class="ds-card-head">
+            <h3>Graphs</h3>
+            <small>Relationships between things</small>
+          </header>
+          <p>Vertices connected by edges. Model networks, maps, dependencies, and more.</p>
+          <div id="demo-graph"></div>
+          <div class="ds-actions">
+            <a href="./dataStructGraph.html">Learn more →</a>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 </body>

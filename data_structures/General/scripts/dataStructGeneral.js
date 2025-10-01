@@ -1,259 +1,260 @@
 // scripts/dataStructGeneral.js
-import { renderComplexityTable } from "./common.js";
 
-/* -------------------------
- * Complexity table (Arrays)
- * ------------------------- */
-const COMPLEXITY_ROWS = [
-  { op: "Index access", avg: "O(1)", worst: "O(1)" },
-  { op: "Search (unsorted)", avg: "O(n)", worst: "O(n)" },
-  { op: "Insert at end (dynamic array)", avg: "O(1)*", worst: "O(n)" },
-  { op: "Insert at index", avg: "O(n)", worst: "O(n)" },
-  { op: "Delete at index", avg: "O(n)", worst: "O(n)" },
-];
-
-function mountComplexity() {
-  const section = document.getElementById("complexity-section");
-  if (!section) return;
-  // Clear existing and rebuild caption with amortized footnote
-  while (section.lastChild && section.querySelector("table"))
-    section.removeChild(section.lastChild);
-  renderComplexityTable(section, COMPLEXITY_ROWS);
-
-  const foot = document.createElement("p");
-  foot.className = "ds-footnote";
-  foot.innerHTML = `<strong>* Amortized:</strong> occasional resizes are expensive, but the average cost per push across many operations stays ~O(1).`;
-  section.appendChild(foot);
-}
-
-/* -------------------------
- * Dynamic Array Playground
- * ------------------------- */
-class DynamicArray {
-  constructor(initialCapacity = 4) {
-    this._data = new Array(initialCapacity).fill(undefined);
-    this.length = 0;
-  }
-  get capacity() {
-    return this._data.length;
-  }
-
-  push(value) {
-    if (this.length >= this.capacity) this._grow();
-    this._data[this.length++] = value;
-  }
-
-  pop() {
-    if (this.length === 0) return undefined;
-    const v = this._data[this.length - 1];
-    this._data[this.length - 1] = undefined;
-    this.length--;
-    return v;
-  }
-
-  /** Overwrite an existing index (0..length-1). No shifting. */
-  setAt(index, value) {
-    const i = Number.parseInt(index, 10);
-    if (!Number.isInteger(i) || i < 0 || i >= this.length) {
-      throw new Error("Index out of range for setAt (must be < length)");
-    }
-    this._data[i] = value;
-  }
-
-  getAt(index) {
-    const i = Number.parseInt(index, 10);
-    if (!Number.isInteger(i) || i < 0 || i >= this.length) {
-      throw new Error("Index out of range for getAt (must be < length)");
-    }
-    return this._data[i];
-  }
-
-  /** Insert at position (0..length), shifting right. */
-  insertAt(index, value) {
-    const i = Number.parseInt(index, 10);
-    if (!Number.isInteger(i) || i < 0 || i > this.length) {
-      throw new Error("Index out of range for insertAt (0..length)");
-    }
-    if (this.length >= this.capacity) this._grow();
-    for (let j = this.length; j > i; j--) this._data[j] = this._data[j - 1];
-    this._data[i] = value;
-    this.length++;
-  }
-
-  deleteAt(index) {
-    const i = Number.parseInt(index, 10);
-    if (!Number.isInteger(i) || i < 0 || i >= this.length) {
-      throw new Error("Index out of range for deleteAt (0..length-1)");
-    }
-    for (let j = i; j < this.length - 1; j++) this._data[j] = this._data[j + 1];
-    this._data[this.length - 1] = undefined;
-    this.length--;
-  }
-
-  reset(cap = 4) {
-    this._data = new Array(cap).fill(undefined);
-    this.length = 0;
-  }
-
-  _grow() {
-    const newCap = Math.max(1, this.capacity * 2);
-    const next = new Array(newCap).fill(undefined);
-    for (let i = 0; i < this.length; i++) next[i] = this._data[i];
-    this._data = next;
-  }
-
-  snapshot() {
-    return this._data.slice();
-  }
-}
-
-function el(tag, props = {}, children = []) {
+/* Utilities */
+const el = (tag, props = {}, children = []) => {
   const node = document.createElement(tag);
   Object.assign(node, props);
-  for (const c of children) node.append(c);
+  (Array.isArray(children) ? children : [children]).forEach(c => c != null && node.append(c));
   return node;
-}
+};
 
-function mountArrayDemo() {
-  const mount = document.getElementById("array-demo");
-  if (!mount) return;
+const chip = (text, extra = "") => el("span", { className: `chip ${extra}`, textContent: text });
+const arrow = (text = "→") => el("span", { className: "arrow", textContent: text });
 
-  const state = new DynamicArray(4);
+/* ---------- Arrays (dynamic) ---------- */
+function mountArraysDemo() {
+  const root = document.getElementById("demo-arrays");
+  if (!root) return;
 
-  // Controls
-  const valueInput = el("input", { type: "text", placeholder: "value" });
-  const indexInput = el("input", {
-    type: "number",
-    placeholder: "index",
-    min: 0,
-  });
-  const btnPush = el("button", { className: "ds-btn", textContent: "Push" });
-  const btnPop = el("button", { className: "ds-btn", textContent: "Pop" });
-  const btnInsert = el("button", {
-    className: "ds-btn",
-    textContent: "Insert @ index",
-  });
-  const btnDelete = el("button", {
-    className: "ds-btn",
-    textContent: "Delete @ index",
-  });
-  const btnReset = el("button", { className: "ds-btn", textContent: "Reset" });
+  const state = { items: [], capacity: 4 };
 
-  const lenBadge = el("span", { className: "badge badge-ok" });
-  const capBadge = el("span", { className: "badge" });
+  const input = el("input", { className: "ds-input", placeholder: "value" });
+  const btnPush = el("button", { className: "ds-btn", textContent: "push" });
+  const btnPop  = el("button", { className: "ds-btn", textContent: "pop" });
 
-  const controls = el("div", { className: "ds-controls" }, [
-    valueInput,
-    indexInput,
-    btnPush,
-    btnPop,
-    btnInsert,
-    btnDelete,
-    btnReset,
-    el("span", { textContent: "Length:" }),
-    lenBadge,
-    el("span", { style: "margin-left:.5rem", textContent: "Capacity:" }),
-    capBadge,
-  ]);
+  const controls = el("div", { className: "ds-controls" }, [input, btnPush, btnPop]);
+  const demo = el("div", { className: "demo-area" });
+  const line = el("div", { className: "inline-grid" });
 
-  const legend = el("div", {
-    className: "demo-legend",
-    innerHTML: `<strong>Legend:</strong> <span class="badge badge-ok">filled</span> cells hold values; 
-     <span class="badge">capacity</span> cells are allocated but empty.`,
-  });
-
-  const grid = el("div", { className: "array-grid" });
-
-  const card = el("div", { className: "ds-card" }, [controls, legend, grid]);
-  mount.replaceChildren(card);
-
-  function render() {
-    lenBadge.textContent = String(state.length);
-    capBadge.textContent = String(state.capacity);
-    grid.replaceChildren(
-      ...state.snapshot().map((v, i) => {
-        const isFilled = i < state.length;
-        const cell = el("div", {
-          className: `cell ${isFilled ? "filled" : "capacity"}`,
-          textContent: isFilled ? String(v) : "•",
-        });
-        cell.title = isFilled
-          ? `index ${i} (value)`
-          : `index ${i} (unused capacity)`;
-        return cell;
-      })
+  const render = () => {
+    line.replaceChildren(
+      ...Array.from({ length: state.capacity }).map((_, i) =>
+        chip(state.items[i] ?? "•", i < state.items.length ? "" : "muted")
+      )
     );
-  }
-
-  // Wire actions with guardrails + UI feedback
-  const safe = (fn) => {
-    try {
-      fn();
-      grid.animate([{ opacity: 0.8 }, { opacity: 1 }], { duration: 120 });
-    } catch (e) {
-      console.warn(e);
-      grid.animate(
-        [
-          { transform: "translateX(0)" },
-          { transform: "translateX(6px)" },
-          { transform: "translateX(0)" },
-        ],
-        { duration: 120 }
-      );
-    } finally {
-      render();
-    }
   };
 
-  btnPush.onclick = () =>
-    safe(() => state.push(valueInput.value || state.length));
-  btnPop.onclick = () => safe(() => state.pop());
-  btnInsert.onclick = () =>
-    safe(() => state.insertAt(indexInput.value, valueInput.value || "X"));
-  btnDelete.onclick = () => safe(() => state.deleteAt(indexInput.value));
-  btnReset.onclick = () => safe(() => state.reset(4));
+  const grow = () => { state.capacity = Math.max(1, state.capacity * 2); };
 
+  btnPush.onclick = () => {
+    const val = (input.value || "").trim() || String(state.items.length);
+    if (state.items.length >= state.capacity) grow(); // simulate resize-doubling
+    state.items.push(val);
+    render();
+  };
+  btnPop.onclick = () => { state.items.pop(); render(); };
+
+  demo.append(line);
+  root.replaceChildren(controls, demo);
   render();
 }
 
-/* -------------------------
- * Micro-quiz
- * ------------------------- */
-const QUIZ = [
-  {
-    q: "Why is append (push) on a dynamic array amortized O(1) instead of O(n)?",
-    a: "Because resizes happen only occasionally; the one expensive copy is spread over many cheap pushes.",
-  },
-  {
-    q: "When is a linked list preferable to an array?",
-    a: "When you frequently insert/delete in the middle using a cursor (and random access isn’t required).",
-  },
-];
+/* ---------- Linked List (singly) ---------- */
+function mountLinkedListDemo() {
+  const root = document.getElementById("demo-linked-list");
+  if (!root) return;
 
-function mountQuiz() {
-  const list = document.getElementById("quiz-list");
-  if (!list) return;
-  list.replaceChildren(
-    ...QUIZ.map(({ q, a }) => {
-      const li = el("li", { className: "quiz-item" });
-      const p = el("p", { textContent: q });
-      const details = el("details");
-      const sum = el("summary", { textContent: "Show answer" });
-      const ans = el("div", { className: "quiz-answer", textContent: a });
-      details.append(sum, ans);
-      li.append(p, details);
-      return li;
-    })
-  );
+  class Node { constructor(v) { this.v = v; this.next = null; } }
+  class List {
+    constructor() { this.head = null; this.tail = null; this.len = 0; }
+    pushBack(v) {
+      const n = new Node(v);
+      if (!this.head) this.head = this.tail = n;
+      else this.tail = this.tail.next = n;
+      this.len++;
+    }
+    popFront() {
+      if (!this.head) return null;
+      const n = this.head;
+      this.head = this.head.next;
+      if (!this.head) this.tail = null;
+      this.len--;
+      return n.v;
+    }
+    toArray() { const out = []; for (let p = this.head; p; p = p.next) out.push(p.v); return out; }
+  }
+
+  const list = new List();
+  const input = el("input", { className: "ds-input", placeholder: "value" });
+  const btnPushBack = el("button", { className: "ds-btn", textContent: "pushBack" });
+  const btnPopFront = el("button", { className: "ds-btn", textContent: "popFront" });
+  const controls = el("div", { className: "ds-controls" }, [input, btnPushBack, btnPopFront]);
+
+  const labels = el("div", { className: "demo-label-row" }, [
+    el("span", { innerHTML: `<span class="kbd">head</span>` }),
+    el("span", { innerHTML: `<span class="kbd">tail</span>` }),
+  ]);
+
+  const demo = el("div", { className: "demo-area" });
+  const line = el("div", { className: "ll-wrap" });
+
+  const render = () => {
+    const vals = list.toArray();
+    if (vals.length === 0) {
+      line.replaceChildren(chip("∅", "muted"));
+      return;
+    }
+    const cells = [];
+    vals.forEach((v, i) => {
+      // annotate head/tail
+      const isHead = i === 0;
+      const isTail = i === vals.length - 1;
+      const label = isHead ? " (H)" : isTail ? " (T)" : "";
+      cells.push(chip(String(v) + label));
+      cells.push(arrow("→"));
+    });
+    cells.push(chip("∅", "muted")); // null terminator
+    line.replaceChildren(...cells);
+  };
+
+  btnPushBack.onclick = () => {
+    const val = (input.value || "").trim() || String(list.len);
+    list.pushBack(val);
+    render();
+  };
+  btnPopFront.onclick = () => { list.popFront(); render(); };
+
+  demo.append(line);
+  root.replaceChildren(controls, labels, demo);
+  render();
 }
 
-/* -------------------------
- * Boot
- * ------------------------- */
+
+/* ---------- Stack (LIFO) ---------- */
+function mountStackDemo() {
+  const root = document.getElementById("demo-stack");
+  if (!root) return;
+
+  const stack = [];
+  const input = el("input", { className: "ds-input", placeholder: "value" });
+  const btnPush = el("button", { className: "ds-btn", textContent: "push" });
+  const btnPop  = el("button", { className: "ds-btn", textContent: "pop" });
+  const controls = el("div", { className: "ds-controls" }, [input, btnPush, btnPop]);
+
+  const labels = el("div", { className: "demo-label-row" }, [
+    el("span", { innerHTML: `<span class="kbd">Top</span>` }),
+    el("span", { innerHTML: `<span class="kbd">Bottom</span>` }),
+  ]);
+
+  const demo = el("div", { className: "demo-area" });
+  const column = el("div", { className: "vertical-stack" });
+
+  const render = () => {
+    if (stack.length === 0) column.replaceChildren(chip("empty", "muted"));
+    else {
+      // top at the top visually
+      column.replaceChildren(...[...stack].reverse().map(v => chip(v)));
+    }
+  };
+
+  btnPush.onclick = () => { stack.push((input.value || "").trim() || String(stack.length)); render(); };
+  btnPop.onclick  = () => { stack.pop(); render(); };
+
+  demo.append(column);
+  root.replaceChildren(controls, labels, demo);
+  render();
+}
+
+
+/* ---------- Queue (FIFO) ---------- */
+function mountQueueDemo() {
+  const root = document.getElementById("demo-queue");
+  if (!root) return;
+
+  const q = [];
+  const input = el("input", { className: "ds-input", placeholder: "value" });
+  const btnEnq = el("button", { className: "ds-btn", textContent: "enqueue" });
+  const btnDeq = el("button", { className: "ds-btn", textContent: "dequeue" });
+  const controls = el("div", { className: "ds-controls" }, [input, btnEnq, btnDeq]);
+
+  const labels = el("div", { className: "demo-label-row" }, [
+    el("span", { innerHTML: `<span class="kbd">Front</span>` }),
+    el("span", { innerHTML: `<span class="kbd">Back</span>` }),
+  ]);
+
+  const demo = el("div", { className: "demo-area" });
+  const line = el("div", { className: "inline-grid" });
+
+  const render = () => {
+    if (q.length === 0) return line.replaceChildren(chip("empty", "muted"));
+    const cells = [];
+    q.forEach((v, i) => {
+      cells.push(chip(v));
+      if (i !== q.length - 1) cells.push(arrow("→"));
+    });
+    line.replaceChildren(...cells);
+  };
+
+  btnEnq.onclick = () => { q.push((input.value || "").trim() || String(q.length)); render(); };
+  btnDeq.onclick = () => { q.shift(); render(); };
+
+  demo.append(line);
+  root.replaceChildren(controls, labels, demo);
+  render();
+}
+
+/* ---------- Tree (preview: static tiny BST) ---------- */
+function mountTreePreview() {
+  const root = document.getElementById("demo-tree");
+  if (!root) return;
+
+  // Simple inline SVG to hint hierarchy (no layout libs needed)
+  const svg = `
+    <svg width="260" height="140" viewBox="0 0 260 140">
+      <g stroke="#2dd4bf" stroke-width="1.5" fill="none">
+        <line x1="130" y1="30" x2="70" y2="70"/><line x1="130" y1="30" x2="190" y2="70"/>
+        <line x1="70" y1="70" x2="40" y2="110"/><line x1="70" y1="70" x2="100" y2="110"/>
+        <line x1="190" y1="70" x2="160" y2="110"/><line x1="190" y1="70" x2="220" y2="110"/>
+      </g>
+      <g fill="#0f1620" stroke="#263241">
+        <circle cx="130" cy="30" r="14"/><circle cx="70" cy="70" r="14"/><circle cx="190" cy="70" r="14"/>
+        <circle cx="40" cy="110" r="14"/><circle cx="100" cy="110" r="14"/>
+        <circle cx="160" cy="110" r="14"/><circle cx="220" cy="110" r="14"/>
+      </g>
+      <g fill="#e6eef8" font-size="10" text-anchor="middle" dominant-baseline="middle">
+        <text x="130" y="30">8</text>
+        <text x="70" y="70">3</text><text x="190" y="70">10</text>
+        <text x="40" y="110">1</text><text x="100" y="110">6</text>
+        <text x="160" y="110">9</text><text x="220" y="110">14</text>
+      </g>
+    </svg>`;
+  root.innerHTML = svg;
+}
+
+/* ---------- Graph (preview: 5 nodes) ---------- */
+function mountGraphPreview() {
+  const root = document.getElementById("demo-graph");
+  if (!root) return;
+
+  const svg = `
+    <svg width="260" height="140" viewBox="0 0 260 140">
+      <g stroke="#7aa2f7" stroke-width="1.4" fill="none">
+        <line x1="40" y1="30" x2="130" y2="30"/>
+        <line x1="130" y1="30" x2="220" y2="30"/>
+        <line x1="130" y1="30" x2="80" y2="100"/>
+        <line x1="80" y1="100" x2="200" y2="100"/>
+        <line x1="200" y1="100" x2="220" y2="30"/>
+      </g>
+      <g fill="#0f1620" stroke="#263241">
+        <circle cx="40" cy="30" r="12"/><circle cx="130" cy="30" r="12"/><circle cx="220" cy="30" r="12"/>
+        <circle cx="80" cy="100" r="12"/><circle cx="200" cy="100" r="12"/>
+      </g>
+      <g fill="#e6eef8" font-size="10" text-anchor="middle" dominant-baseline="middle">
+        <text x="40" y="30">A</text><text x="130" y="30">B</text><text x="220" y="30">C</text>
+        <text x="80" y="100">D</text><text x="200" y="100">E</text>
+      </g>
+    </svg>`;
+  root.innerHTML = svg;
+}
+
+/* ---------- Boot ---------- */
 function boot() {
-  mountComplexity();
-  mountArrayDemo();
-  mountQuiz();
+  mountArraysDemo();
+  mountLinkedListDemo();
+  mountStackDemo();
+  mountQueueDemo();
+  mountTreePreview();
+  mountGraphPreview();
 }
 
 if (document.readyState === "loading") {

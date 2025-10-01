@@ -21,14 +21,13 @@ html, body {
   line-height: 1.5;
 }
 
+/* ----- Site chrome (kept) ----- */
 .site-header, .site-footer {
   background: var(--panel);
   border-bottom: 1px solid var(--border);
   padding: 1rem 1.2rem;
 }
-
 .site-footer { border-top: 1px solid var(--border); border-bottom: 0; margin-top: 2rem; }
-
 .site-title { margin: 0 0 .5rem 0; font-size: 1.4rem; }
 
 .site-nav a {
@@ -38,17 +37,22 @@ html, body {
   padding: .25rem .5rem;
   border-radius: .4rem;
 }
-
 .site-nav a:hover { background: #0e1520; }
 .site-nav a.active, .site-nav a[aria-current="page"] {
   outline: 1px solid var(--active);
   color: var(--active);
 }
 
+/* ----- Page layout ----- */
 main {
   max-width: 960px;
   margin: 1.5rem auto;
   padding: 0 1rem;
+}
+header .tagline {
+  color: var(--muted);
+  margin-top: .25rem;
+  font-size: 1rem;
 }
 
 section {
@@ -59,9 +63,10 @@ section {
   margin-bottom: 1rem;
 }
 
-h1, h2, h3 { color: var(--text); }
+h1, h2, h3 { color: var(--text); margin-top: 0; }
 p, li { color: var(--muted); }
 
+/* ----- Callout + table (kept) ----- */
 .complexity-table {
   width: 100%;
   border-collapse: collapse;
@@ -70,20 +75,17 @@ p, li { color: var(--muted); }
   border-radius: .6rem;
   overflow: hidden;
 }
-
 .complexity-table th, .complexity-table td {
   border: 1px solid var(--border);
   padding: .6rem .5rem;
   text-align: left;
 }
-
 .complexity-table caption {
   text-align: left;
   padding: .5rem .25rem;
   color: var(--accent);
   font-weight: 600;
 }
-
 .ds-callout {
   border-left: 3px solid var(--accent);
   padding: .75rem .9rem;
@@ -92,15 +94,33 @@ p, li { color: var(--muted); }
   margin-top: .75rem;
 }
 
-/* --- Demo cards/buttons/badges --- */
+/* =========================================
+   DSA Gallery additions
+   ========================================= */
+
+/* Grid of cards */
+.ds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* Card chrome (extends your .ds-card) */
 .ds-card {
   background: var(--panel, #121820);
   border: 1px solid var(--border, #263241);
   border-radius: .8rem;
   padding: 1rem;
   margin: .75rem 0;
+  display: flex;
+  flex-direction: column;
 }
+.ds-card-head h3 { margin: 0; font-size: 1.1rem; }
+.ds-card-head small { color: var(--muted); display: block; margin-top: .2rem; }
+.ds-actions { margin-top: .6rem; }
+.ds-actions a { color: var(--link); }
 
+/* Small control row */
 .ds-controls {
   display: flex;
   flex-wrap: wrap;
@@ -108,30 +128,44 @@ p, li { color: var(--muted); }
   align-items: center;
   margin-bottom: .75rem;
 }
-
 .ds-controls input[type="number"],
-.ds-controls input[type="text"] {
+.ds-controls input[type="text"],
+.ds-input {
   background: #0f1620;
-  color: var(--text, #e6eef8);
-  border: 1px solid var(--border, #263241);
+  color: var(--text);
+  border: 1px solid var(--border);
   border-radius: .5rem;
   padding: .35rem .5rem;
   width: 7rem;
 }
 
+/* Buttons */
 .ds-btn {
   background: #0e1520;
-  color: var(--text, #e6eef8);
-  border: 1px solid var(--border, #263241);
+  color: var(--text);
+  border: 1px solid var(--border);
   border-radius: .6rem;
   padding: .4rem .7rem;
   cursor: pointer;
 }
-.ds-btn:hover { outline: 1px solid var(--active, #2dd4bf); }
+.ds-btn:hover { outline: 1px solid var(--active); }
 
+/* Inline visual elements (chips/arrows) used across demos */
+.chip {
+  min-width: 36px; min-height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: .5rem;
+  background: #0f1620;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
+  font-size: .9rem;
+}
+.chip.muted { opacity: .6; }
+
+/* Badges (kept) */
 .badge {
   display: inline-block;
-  border: 1px solid var(--border, #263241);
+  border: 1px solid var(--border);
   border-radius: .5rem;
   padding: .2rem .45rem;
   font-size: .85rem;
@@ -140,20 +174,20 @@ p, li { color: var(--muted); }
 .badge-ok { color: #7ee787; border-color: #214a2e; }
 .badge-warn { color: #f5a97f; border-color: #4a3a21; }
 
-.demo-legend { margin: .3rem 0 .8rem; color: var(--muted, #9fb3c8); font-size: .95rem; }
+/* Legend text */
+.demo-legend { margin: .3rem 0 .8rem; color: var(--muted); font-size: .95rem; }
 
-/* --- Array grid --- */
+/* ----- Array grid (kept for array-specific page) ----- */
 .array-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
   gap: .4rem;
 }
-
 .cell {
   min-height: 46px;
   display: flex; align-items: center; justify-content: center;
   border-radius: .5rem;
-  border: 1px solid var(--border, #263241);
+  border: 1px solid var(--border);
   background: #0f1620;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
   font-size: .9rem;
@@ -161,7 +195,94 @@ p, li { color: var(--muted); }
 .cell.filled { background: rgba(45, 212, 191, 0.08); border-color: #2dd4bf66; }
 .cell.capacity { background: rgba(122, 162, 247, 0.08); border-style: dashed; }
 
-/* --- Quiz --- */
+/* ----- Quiz (kept) ----- */
 .quiz-item { margin-bottom: .75rem; }
 .quiz-item details { margin-top: .35rem; }
-.quiz-answer { color: var(--muted, #9fb3c8); }
+.quiz-answer { color: var(--muted); }
+
+/* ----- Helpers (optional) ----- */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden; clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap; border: 0; padding: 0; margin: -1px;
+}
+
+/* Contain demo visuals inside the card */
+.ds-card {
+  position: relative;
+  overflow: hidden;               /* prevents spillover */
+}
+
+/* Generic demo area with safe sizing */
+.demo-area {
+  max-width: 100%;
+  overflow: auto;                 /* scroll if it still overflows */
+  padding: .25rem 0;
+}
+
+/* Horizontal line demos (array, queue) */
+.inline-grid {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: .4rem;
+  align-items: center;
+  max-width: 100%;
+}
+
+/* Vertical stacks (stack) */
+.vertical-stack {
+  display: flex;
+  flex-direction: column;         /* vertical orientation */
+  align-items: stretch;
+  gap: .4rem;
+  max-height: 240px;              /* keep tall stacks contained */
+  overflow: auto;                 /* scroll if too tall */
+  padding-right: .25rem;          /* avoid scrollbar overlay */
+}
+
+/* Linked list line with arrows that can wrap onto next line */
+.ll-wrap {
+  display: flex;
+  flex-wrap: wrap;                /* wrap when wide */
+  gap: .4rem;
+  align-items: center;
+  max-height: 160px;
+  overflow: auto;                 /* scroll if it gets too tall */
+}
+
+.chip {
+  min-width: 36px; min-height: 36px;
+  padding: 0 .5rem;               /* allow a bit of width give */
+}
+
+.arrow { opacity: .6; margin: 0 .2rem; }
+
+/* Small labels for ends / pointers */
+.kbd {
+  display: inline-block;
+  padding: .1rem .35rem;
+  border: 1px solid var(--border);
+  border-radius: .35rem;
+  background: #0f1620;
+  font-size: .75rem;
+  color: var(--muted);
+  margin: 0 .25rem;
+  white-space: nowrap;
+}
+
+/* Align labels above/beside demos neatly */
+.demo-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .85rem;
+  color: var(--muted);
+  margin-bottom: .4rem;
+}
+
+
+/* Prefer-reduced-motion accessibility (for any JS animations you add) */
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+}
