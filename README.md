@@ -10,7 +10,7 @@ The project includes:
 
 ##  Goals
 
-- Build deep intuition for how DSA structures behave internally
+- Build intuition for how DSA structures behave internally
 - Visualize dynamic operations step-by-step (e.g. insertions, deletions, traversals)
 - Practice implementing key algorithms from scratch
 - Create a personal reference library to revisit concepts later
